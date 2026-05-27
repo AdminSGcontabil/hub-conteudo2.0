@@ -146,6 +146,25 @@ textarea.post-input::placeholder{color:var(--sub2);}
 .cc-val{font-size:12px;color:var(--sub);line-height:1.5;}
 .err-box{background:rgba(200,112,112,0.08);border:1px solid rgba(200,112,112,0.2);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--red);line-height:1.55;margin-top:10px;display:none;}
 .err-box.on{display:block;}
+/* THREAD STYLES */
+.thread-wrap{display:flex;flex-direction:column;gap:0;}
+.thread-slide{display:flex;gap:14px;padding:16px 0;}
+.thread-slide:not(:last-child){border-bottom:1px solid var(--border);}
+.thread-left{display:flex;flex-direction:column;align-items:center;gap:0;flex-shrink:0;}
+.thread-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8B6020);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#0F1013;flex-shrink:0;}
+.thread-line{width:2px;flex:1;background:var(--border2);margin-top:6px;}
+.thread-right{flex:1;min-width:0;padding-bottom:4px;}
+.thread-meta{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+.thread-name{font-size:13px;font-weight:700;color:var(--text);}
+.thread-handle{font-size:12px;color:var(--sub);}
+.thread-num{font-size:11px;color:var(--sub2);margin-left:auto;background:var(--card2);padding:2px 7px;border-radius:10px;}
+.thread-bold{font-size:14px;font-weight:700;color:var(--text);line-height:1.45;margin-bottom:6px;}
+.thread-body{font-size:13px;color:var(--sub);line-height:1.65;}
+.thread-cta{background:rgba(200,169,110,0.08);border:1px solid rgba(200,169,110,0.2);border-radius:8px;padding:12px 14px;margin-top:6px;}
+.thread-cta-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--gold);margin-bottom:4px;}
+.thread-cta-text{font-size:13px;color:var(--text);font-weight:500;}
+.copy-thread-btn{display:inline-flex;align-items:center;gap:5px;margin-top:14px;font-size:12px;font-weight:600;padding:8px 16px;border-radius:8px;border:none;background:rgba(255,255,255,0.06);color:var(--sub);cursor:pointer;font-family:inherit;transition:all 0.15s;width:100%;justify-content:center;}
+.copy-thread-btn:hover{background:rgba(255,255,255,0.1);color:var(--text);}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--card2);border:1px solid var(--border2);color:var(--text);font-size:13px;font-weight:500;padding:10px 18px;border-radius:9px;z-index:999;opacity:0;transform:translateY(6px);transition:all 0.22s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
 </style>
@@ -216,6 +235,7 @@ textarea.post-input::placeholder{color:var(--sub2);}
         <div class="fmt-row">
           <span class="fmt-label">Gerar como:</span>
           <button class="fmt-btn on" data-fmt="Carrossel" onclick="selectFmt(this)">Carrossel</button>
+          <button class="fmt-btn" data-fmt="Thread" onclick="selectFmt(this)">🧵 Thread</button>
           <button class="fmt-btn" data-fmt="Reels" onclick="selectFmt(this)">Reels</button>
           <button class="fmt-btn" data-fmt="Stories" onclick="selectFmt(this)">Stories</button>
           <button class="fmt-btn" data-fmt="Post estático" onclick="selectFmt(this)">Post estático</button>
@@ -241,20 +261,41 @@ textarea.post-input::placeholder{color:var(--sub2);}
 
   <div class="result-section" id="resultSection">
     <div class="result-label">✦ Seu conteúdo gerado</div>
-    <div class="result-card">
-      <div class="rc-head">
-        <span class="rc-icon">📝</span>
-        <span class="rc-title" id="rc-title">—</span>
-        <span class="rc-badge" id="rc-badge">—</span>
-      </div>
-      <div class="rc-body">
-        <div><div class="rc-field-label">Gancho — primeira frase</div><div class="rc-field-val gancho" id="rc-gancho">—</div></div>
-        <div><div class="rc-field-label">Legenda completa</div><div class="rc-field-val legenda" id="rc-legenda">—</div><button class="copy-btn" onclick="copyText('rc-legenda')">⎘ Copiar legenda</button></div>
-        <div><div class="rc-field-label">Call to action</div><div class="rc-field-val cta" id="rc-cta">—</div></div>
-        <div><div class="rc-field-label">Ideia visual</div><div class="rc-field-val visual" id="rc-visual">—</div></div>
-        <div><div class="rc-field-label">Por que supera o do concorrente</div><div class="rc-field-val" id="rc-why" style="color:var(--sub);font-size:12px;">—</div></div>
+
+    <!-- RESULTADO PADRÃO -->
+    <div id="resultStandard">
+      <div class="result-card">
+        <div class="rc-head">
+          <span class="rc-icon">📝</span>
+          <span class="rc-title" id="rc-title">—</span>
+          <span class="rc-badge" id="rc-badge">—</span>
+        </div>
+        <div class="rc-body">
+          <div><div class="rc-field-label">Gancho — primeira frase</div><div class="rc-field-val gancho" id="rc-gancho">—</div></div>
+          <div><div class="rc-field-label">Legenda completa</div><div class="rc-field-val legenda" id="rc-legenda">—</div><button class="copy-btn" onclick="copyText('rc-legenda')">⎘ Copiar legenda</button></div>
+          <div><div class="rc-field-label">Call to action</div><div class="rc-field-val cta" id="rc-cta">—</div></div>
+          <div><div class="rc-field-label">Ideia visual</div><div class="rc-field-val visual" id="rc-visual">—</div></div>
+          <div><div class="rc-field-label">Por que supera o do concorrente</div><div class="rc-field-val" id="rc-why" style="color:var(--sub);font-size:12px;">—</div></div>
+        </div>
       </div>
     </div>
+
+    <!-- RESULTADO THREAD -->
+    <div id="resultThread" style="display:none;">
+      <div class="result-card">
+        <div class="rc-head">
+          <span class="rc-icon">🧵</span>
+          <span class="rc-title" id="rc-thread-title">—</span>
+          <span class="rc-badge badge-carrossel">Thread</span>
+        </div>
+        <div class="rc-body" style="padding-bottom:8px;">
+          <div class="thread-wrap" id="threadSlides"></div>
+          <button class="copy-thread-btn" onclick="copyThread()">⎘ Copiar thread completa</button>
+          <div style="margin-top:12px;"><div class="rc-field-label">Por que supera o do concorrente</div><div class="rc-field-val" id="rc-thread-why" style="color:var(--sub);font-size:12px;">—</div></div>
+        </div>
+      </div>
+    </div>
+
     <div class="result-actions">
       <button class="ra-btn" onclick="clearResult()">↺ Novo conteúdo</button>
       <button class="ra-btn primary" onclick="saveToHistory()">＋ Salvar</button>
@@ -425,13 +466,25 @@ async function generateContent(){
 
   var comp=selectedComp?'@'+selectedComp:'um concorrente';
   var extra=document.getElementById('postInput').value.trim();
+  var isThread = selectedFmt==='Thread';
+
   var prompt='Você é um estrategista de conteúdo para um escritório de contabilidade brasileiro.\n'
     +'O usuário enviou '+(uploadedImages.length>1?uploadedImages.length+' prints':'um print')+' de um post do concorrente ('+comp+').\n'
-    +(extra?'Observação: "'+extra+'"\n\n':'\n')
-    +'Leia o conteúdo visível no(s) print(s) e crie um post ORIGINAL e MELHOR para a nossa marca, no formato: '+selectedFmt+'.\n\n'
-    +'Regras: não copie, inspire-se e supere. Tom consultivo, direto e acessível para empresários brasileiros. Sem promessas absolutas de economia tributária. Foco em empresários com negócios estruturados.\n\n'
-    +'Retorne SOMENTE JSON válido sem markdown:\n'
-    +'{"tema":"título em até 10 palavras","gancho":"primeira frase impactante máx 15 palavras","legenda":"legenda completa pronta para publicar 3-5 parágrafos curtos com emojis","cta":"call to action final 1 frase","visual":"descrição da arte ou vídeo 2 frases","porque":"por que supera o concorrente 1-2 frases"}';
+    +(extra?'Observação: "'+extra+'"\n\n':'\n');
+
+  if(isThread){
+    prompt+='Leia o conteúdo e crie uma THREAD ORIGINAL e MELHOR no estilo do Twitter/X para nossa marca de contabilidade.\n'
+      +'Estrutura: 8 a 12 slides. Cada slide tem uma frase de impacto curta (título) + parágrafo explicativo (2-4 linhas). O último slide tem um CTA forte.\n'
+      +'Tom: direto, provocativo mas profissional. Cada slide deve fazer o leitor querer ir pro próximo.\n'
+      +'Regras: não copie, supere. Sem promessas absolutas de economia tributária. Foco em empresários com negócios estruturados.\n\n'
+      +'Retorne SOMENTE JSON válido sem markdown:\n'
+      +'{"tema":"título da thread em até 10 palavras","slides":[{"titulo":"frase de impacto curta","corpo":"parágrafo explicativo 2-4 linhas"}],"cta":"call to action do último slide","porque":"por que supera o concorrente 1-2 frases"}';
+  } else {
+    prompt+='Leia o conteúdo visível no(s) print(s) e crie um post ORIGINAL e MELHOR para a nossa marca, no formato: '+selectedFmt+'.\n'
+      +'Regras: não copie, inspire-se e supere. Tom consultivo, direto e acessível para empresários brasileiros. Sem promessas absolutas de economia tributária. Foco em empresários com negócios estruturados.\n\n'
+      +'Retorne SOMENTE JSON válido sem markdown:\n'
+      +'{"tema":"título em até 10 palavras","gancho":"primeira frase impactante máx 15 palavras","legenda":"legenda completa pronta para publicar 3-5 parágrafos curtos com emojis","cta":"call to action final 1 frase","visual":"descrição da arte ou vídeo 2 frases","porque":"por que supera o concorrente 1-2 frases"}';
+  }
 
   var content=uploadedImages.map(function(img){
     return {type:'image',source:{type:'base64',media_type:img.mediaType,data:img.base64}};
@@ -471,15 +524,54 @@ function showErr(msg){ var b=document.getElementById('errBox'); b.textContent='�
 function hideErr(){ document.getElementById('errBox').classList.remove('on'); }
 
 function renderResult(r){
-  document.getElementById('rc-title').textContent=r.tema||'—';
-  document.getElementById('rc-gancho').textContent=r.gancho||'—';
-  document.getElementById('rc-legenda').textContent=r.legenda||'—';
-  document.getElementById('rc-cta').textContent=r.cta||'—';
-  document.getElementById('rc-visual').textContent=r.visual||'—';
-  document.getElementById('rc-why').textContent=r.porque||'—';
-  var badge=document.getElementById('rc-badge');
-  badge.textContent=r.fmt||'—';
-  badge.className='rc-badge '+(r.fmt==='Carrossel'?'badge-carrossel':r.fmt==='Reels'?'badge-reels':r.fmt==='Stories'?'badge-stories':'badge-post');
+  var isThread = r.fmt==='Thread';
+  document.getElementById('resultStandard').style.display = isThread?'none':'block';
+  document.getElementById('resultThread').style.display   = isThread?'block':'none';
+
+  if(isThread){
+    document.getElementById('rc-thread-title').textContent = r.tema||'—';
+    document.getElementById('rc-thread-why').textContent   = r.porque||'—';
+    var slides = r.slides||[];
+    var html = slides.map(function(s,i){
+      var isLast = i===slides.length-1;
+      return '<div class="thread-slide">'
+        +'<div class="thread-left">'
+        +'<div class="thread-avatar">SG</div>'
+        +(isLast?'':'<div class="thread-line"></div>')
+        +'</div>'
+        +'<div class="thread-right">'
+        +'<div class="thread-meta">'
+        +'<span class="thread-name">Seu escritório</span>'
+        +'<span class="thread-num">'+(i+1)+'/'+slides.length+'</span>'
+        +'</div>'
+        +'<div class="thread-bold">'+(s.titulo||'')+'</div>'
+        +'<div class="thread-body">'+(s.corpo||'')+'</div>'
+        +(isLast&&r.cta?'<div class="thread-cta"><div class="thread-cta-label">Call to action</div><div class="thread-cta-text">'+r.cta+'</div></div>':'')
+        +'</div></div>';
+    }).join('');
+    document.getElementById('threadSlides').innerHTML = html;
+  } else {
+    document.getElementById('rc-title').textContent  = r.tema   ||'—';
+    document.getElementById('rc-gancho').textContent = r.gancho ||'—';
+    document.getElementById('rc-legenda').textContent= r.legenda||'—';
+    document.getElementById('rc-cta').textContent    = r.cta    ||'—';
+    document.getElementById('rc-visual').textContent = r.visual ||'—';
+    document.getElementById('rc-why').textContent    = r.porque ||'—';
+    var badge=document.getElementById('rc-badge');
+    badge.textContent=r.fmt||'—';
+    badge.className='rc-badge '+(r.fmt==='Carrossel'?'badge-carrossel':r.fmt==='Reels'?'badge-reels':r.fmt==='Stories'?'badge-stories':'badge-post');
+  }
+}
+
+function copyThread(){
+  if(!lastResult||!lastResult.slides) return;
+  var txt = lastResult.slides.map(function(s,i){
+    return (i+1)+'. '+s.titulo+'\n\n'+s.corpo;
+  }).join('\n\n---\n\n');
+  if(lastResult.cta) txt+='\n\n---\n\n'+lastResult.cta;
+  navigator.clipboard.writeText(txt).then(function(){showToast('Thread copiada!');}).catch(function(){
+    var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Thread copiada!');
+  });
 }
 function clearResult(){
   document.getElementById('resultSection').classList.remove('on');
